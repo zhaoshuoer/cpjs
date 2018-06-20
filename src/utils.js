@@ -43,21 +43,10 @@ export default {
         return fs.realpathSync(path)
     },
     /**
-     * 获取一个文件或者文件夹的完整路径
-     * 在Windows下可能为“C://*.js”
-     * 在Linux下可能为“/root/*.js”
-     * 当路径不可用直接返回-1
-     * @param {*} path 
-     */
-    getFullPath(path) {
-        if (!this.exists(path)) return -1
-        return fs.realpathSync(path)
-    },
-    /**
      * 是否是一个文件夹
      * @param {*} dirPath 
      */
-    isDirectory(dirPath) {
+    isDir(dirPath) {
         let fullPath = this.getFullPath(dirPath)
         if (fullPath == -1) return false
         return this.statFollowLinks(fullPath).isDirectory()
@@ -70,5 +59,16 @@ export default {
         let fullPath = this.getFullPath(filePath)
         if (fullPath == -1) return false
         return this.statFollowLinks(fullPath).isFile()
+    },
+    /**
+     * 读取一个文件夹
+     * @param {*} dirPath 
+     */
+    readdir(dirPath){
+        if(!dirPath)return []
+        if (!this.isDir(dirPath)){
+            return this.error(`${dirPath} 不是一个文件夹`)
+        }
+        return fs.readdirSync(dirPath)
     }
 }
