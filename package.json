@@ -1,0 +1,20 @@
+{
+  "name": "cpjs",
+  "version": "1.0.4",
+  "description": "这是一个用于项目间拷贝文件的脚本",
+  "main": "cpjs.js",
+  "bin": {
+    "cpjs": "./bin/cpjs"
+  },
+  "scripts": {
+    "test": "cpjs"
+  },
+  "keywords": [],
+  "author": "烁儿",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "yargs": "^11.0.0"
+  }
+}
