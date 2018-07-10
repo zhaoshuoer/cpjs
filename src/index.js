@@ -1,6 +1,5 @@
 import fs from 'fs'
 import utils from './utils'
-console.log(utils.error('cuowu'))
 let sources = '',
     dest = '',
     filePaths = [],

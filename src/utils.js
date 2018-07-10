@@ -1,5 +1,6 @@
-import fs from 'fs'
-export default {
+const fs = require('fs')
+module.exports = {
+    availableFolder:[],
     isObject(obj) {
         return (typeof obj === "object" && obj !== null) || typeof obj === "function";
     },
@@ -17,6 +18,14 @@ export default {
     },
     getCurrDir(){
         return process.cwd()
+    },
+    getDefaultDestDir(){
+        let currDir = this.getCurrDir()
+        if (currDir.indexOf('apps') > -1 && this.isDir(`${currDir.split('apps')[0]}/www/dist`)){
+            return this.getFullPath(`${currDir.split('apps')[0]}/www/dist`)
+        }else{
+            return currDir
+        }
     },
     /**
      * 返回一个stat实例用于各种条件判断
@@ -70,5 +79,32 @@ export default {
             return this.error(`${dirPath} 不是一个文件夹`)
         }
         return fs.readdirSync(dirPath)
+    },
+    /**
+     * 查找可复制的文件夹
+     * @param {*} sourcesDir 
+     */
+    findAvailableFolder(sourcesDir){
+        if (!sourcesDir) return 
+        let childrens = this.readdir(sourcesDir)
+        if (childrens.length <= 0) return 
+        if (childrens.find(e => e == 'package.json')) {
+            this.availableFolder.push(sourcesDir)
+        } else {
+            childrens.map(e => {
+                let currentPath = this.getFullPath(`${sourcesDir}/${e}`)
+                if (currentPath != -1 && this.isDir(currentPath) && e != 'node_modules') {
+                    this.findAvailableFolder(currentPath)
+                }
+            })
+        }
+    },
+    /**
+     * 获取可复制的文件夹数组
+     * @param {*} sourcesDir 
+     */
+    getAvailableFolders(sourcesDir){
+        this.findAvailableFolder(sourcesDir)
+        return this.availableFolder
     }
 }
