@@ -38,7 +38,8 @@ var argv = require('yargs')
     .alias('h', 'help')
     .epilog('')
     .argv;
-// let aa = utils.findAvailableDir(utils.getFullPath(argv.s))
-console.log(utils.getAvailableFolder(utils.getFullPath(argv.s)))
-// console.log(aa)
-
+utils.checkEnv(argv)
+let availableFolders = utils.getAvailableFolders(utils.getFullPath(argv.s))
+let copyFiles = utils.assembleCopyFiles(argv, availableFolders)
+copyFiles.map(fileInfo => utils.cp(fileInfo))
+utils.errorMsg.length > 0 && utils.errorMsg.map(err => console.error(err))
